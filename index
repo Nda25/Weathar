@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التطبيق التعليمي الذكي للوعي البيئي</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #9c27b0; /* اللون البنفسجي */
+            --secondary-color: #e91e63; /* اللون الزهري */
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .robot-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+        }
+        
+        .robot-head {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 40% 40% 30% 30%;
+            position: relative;
+            margin: 0 auto;
+        }
+        
+        .robot-eye {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 25px;
+        }
+        
+        .robot-eye.left {
+            left: 15px;
+        }
+        
+        .robot-eye.right {
+            right: 15px;
+        }
+        
+        .robot-eye::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: #333;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+        
+        .robot-mouth {
+            width: 30px;
+            height: 10px;
+            background-color: white;
+            border-radius: 0 0 15px 15px;
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .robot-body {
+            width: 100px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 20px 20px 0 0;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 1.5rem;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 30px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            transform: scale(1.05);
+        }
+        
+        .chat-container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: #f8f9fa;
+        }
+        
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        
+        .user-message {
+            background-color: #e1f5fe;
+            margin-left: auto;
+            border-bottom-right-radius: 0;
+        }
+        
+        .bot-message {
+            background-color: #f3e5f5;
+            margin-right: auto;
+            border-bottom-left-radius: 0;
+        }
+        
+        .input-group {
+            border-radius: 30px;
+            overflow: hidden;
+        }
+        
+        .form-control {
+            border-radius: 30px 0 0 30px;
+            border: 1px solid var(--primary-color);
+            padding: 0.75rem 1rem;
+        }
+        
+        .input-group-text {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 0 30px 30px 0;
+            cursor: pointer;
+        }
+        
+        .environment-data {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .data-card {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            background-color: #f8f9fa;
+        }
+        
+        .data-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .progress {
+            height: 10px;
+            margin-top: 0.5rem;
+        }
+        
+        .project-card {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .robot-container {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .robot-head {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .robot-eye {
+                width: 15px;
+                height: 15px;
+                top: 20px;
+            }
+            
+            .robot-eye.left {
+                left: 10px;
+            }
+            
+            .robot-eye.right {
+                right: 10px;
+            }
+            
+            .robot-mouth {
+                width: 25px;
+                height: 8px;
+                bottom: 12px;
+            }
+            
+            .robot-body {
+                width: 80px;
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- رأس الصفحة مع الروبوت -->
+    <header class="header text-center">
+        <div class="container">
+            <div class="robot-container">
+                <div class="robot-head">
+                    <div class="robot-eye left"></div>
+                    <div class="robot-eye right"></div>
+                    <div class="robot-mouth"></div>
+                </div>
+                <div class="robot-body"></div>
+            </div>
+            <h1 class="display-4 fw-bold">التطبيق التعليمي الذكي للوعي البيئي</h1>
+            <p class="lead">استخدم الذكاء الاصطناعي لتحليل البيانات البيئية وتقديم حلول مبتكرة</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- قسم المحادثة مع الروبوت -->
+        <section class="mb-5">
+            <h2 class="section-title">اسأل الروبوت المساعد</h2>
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot-message">
+                        <strong>الروبوت المساعد:</strong> مرحباً! أنا روبوتك المساعد في مجال البيئة. كيف يمكنني مساعدتك اليوم؟ يمكنني تقديم معلومات عن جودة الهواء، استهلاك الطاقة، والمياه، أو مساعدتك في مشاريعك البيئية.
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="userInput" placeholder="اكتب سؤالك هنا...">
+                    <span class="input-group-text" id="sendButton">
+                        <i class="fas fa-paper-plane"></i>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم البيانات البيئية -->
+        <section class="mb-5">
+            <h2 class="section-title">البيانات البيئية في منطقتك</h2>
+            <div class="environment-data">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="data-card">
+                            <i class="fas fa-wind feature-icon"></i>
+                            <h4>جودة الهواء</h4>
+                            <div class="data-value" id="airQuality">78%</div>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 78%"></div>
+                            </div>
+                            <p>مستوى مقبول مع بعض الملوثات</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-card">
+                            <i class="fas fa-tint feature-icon"></i>
+                            <h4>استهلاك المياه</h4>
+                            <div class="data-value" id="waterConsumption">320 لتر</div>
+                            <div class="progress">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 64%"></div>
+                            </div>
+                            <p>متوسط الاستهلاك اليومي للفرد</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-card">
+                            <i class="fas fa-bolt feature-icon"></i>
+                            <h4>استهلاك الطاقة</h4>
+                            <div class="data-value" id="energyConsumption">15 ك.و.س</div>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 75%"></div>
+                            </div>
+                            <p>متوسط الاستهلاك اليومي للأسرة</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button class="btn btn-primary" id="updateData">
+                        <i class="fas fa-sync-alt me-2"></i>تحديث البيانات
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم الميزات الرئيسية -->
+        <section class="mb-5">
+            <h2 class="section-title">ميزات التطبيق</h2>
+            <div class="row">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-brain feature-icon"></i>
+                            <h5 class="card-title">نماذج تعليمية ذكية</h5>
+                            <p class="card-text">تحليل البيانات البيئية وتقديم تقارير تفاعلية للطلاب حول جودة الهواء والمياه واستهلاك الطاقة.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-laptop-code feature-icon"></i>
+                            <h5 class="card-title">تطبيقات تعليمية</h5>
+                            <p class="card-text">تطبيقات تعليمية افتراضية تستخدم تقنيات محاكاة الظواهر البيئية لتوضيح المفاهيم العلمية.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-users feature-icon"></i>
+                            <h5 class="card-title">مشاريع جماعية</h5>
+                            <p class="card-text">تنظيم مشاريع جماعية يستخدم فيها الطلاب الذكاء الاصطناعي لتطوير حلول للمشكلات البيئية.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card feature-card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chart-line feature-icon"></i>
+                            <h5 class="card-title">التقييم والتحليل</h5>
+                            <p class="card-text">استخدام أدوات الذكاء الاصطناعي لتقييم أداء الطلاب وتحليل مستوى فهمهم للمفاهيم البيئية.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم المشاريع البيئية -->
+        <section class="mb-5">
+            <h2 class="section-title">المشاريع البيئية المقترحة</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="project-card">
+                        <h4>تحسين كفاءة الطاقة في المدرسة</h4>
+                        <p>استخدام أجهزة استشعار لمراقبة استهلاك الطاقة في الفصول واقتراح طرق لتحسين الكفاءة.</p>
+                        <div class="progress mb-2">
+                            <div class="progress-bar" role="progressbar" style="width: 65%">65%</div>
+                        </div>
+                        <small>5 طلاب مشاركين | 3 أسابيع متبقية</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="project-card">
+                        <h4>مراقبة جودة الهواء في الحي</h4>
+                        <p>تركيب محطات مراقبة جودة الهواء وتحليل البيانات لتحديد مصادر التلوث المحتملة.</p>
+                        <div class="progress mb-2">
+                            <div class="progress-bar" role="progressbar" style="width: 40%">40%</div>
+                        </div>
+                        <small>8 طلاب مشاركين | 5 أسابيع متبقية</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="project-card">
+                        <h4>ترشيد استهلاك المياه</h4>
+                        <p>تحليل أنماط استهلاك المياه واقتراح حلول عملية لترشيد الاستهلاك في المنازل والمدارس.</p>
+                        <div class="progress mb-2">
+                            <div class="progress-bar" role="progressbar" style="width: 25%">25%</div>
+                        </div>
+                        <small>6 طلاب مشاركين | 7 أسابيع متبقية</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="project-card">
+                        <h4>إعادة تدوير النفايات الإلكترونية</h4>
+                        <p>تصميم نظام فعال لجمع وإعادة تدوير النفايات الإلكترونية في المجتمع المحلي.</p>
+                        <div class="progress mb-2">
+                            <div class="progress-bar" role="progressbar" style="width: 80%">80%</div>
+                        </div>
+                        <small>10 طلاب مشاركين | أسبوعان متبقيان</small>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>إضافة مشروع جديد
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- تذييل الصفحة -->
+    <footer class="text-center">
+        <div class="container">
+            <p>التطبيق التعليمي الذكي للوعي البيئي &copy; 2023</p>
+            <p>تم تطويره باستخدام تقنيات الذكاء الاصطناعي لتحقيق أهداف التنمية المستدامة</p>
+        </div>
+    </footer>
+
+    <!-- الربط مع مكتبات JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // محاكاة الردود من الذكاء الاصطناعي
+        const aiResponses = {
+            "جودة الهواء": "جودة الهواء في منطقتك حالياً مقبولة بنسبة 78%. المستويات المقبولة تتراوح بين 0-50 جسيمات دقيقة لكل متر مكعب. نوصي بتقليل استخدام السيارات وزراعة المزيد من الأشجار لتحسين جودة الهواء.",
+            "استهلاك المياه": "متوسط استهلاك الفرد للمياه هو 320 لتر يومياً. يمكن توفير 30% من هذا الاستهلاك عن طريق إصلاح التسريبات، استخدام رؤوس الدش الموفرة للمياه، وري النباتات في الصباح الباكر.",
+            "استهلاك الطاقة": "متوسط استهلاك الأسرة للطاقة هو 15 كيلوواط ساعة يومياً. يمكن تقليل هذا الاستهلاك بنسبة 20% باستخدام مصابيح LED، وإيقاف تشغيل الأجهزة الإلكترونية عند عدم استخدامها، وضبط منظم الحرارة على درجة مناسبة.",
+            "مشروع": "لبدء مشروع بيئي، حدد أولاً المشكلة التي تريد حلها، ثم شكل فريقاً، واجمع البيانات ذات الصلة، واستخدم أدوات الذكاء الاصطناعي لتحليل البيانات وتطوير الحلول.",
+            "تقرير": "يمكنني مساعدتك في إنشاء تقرير بيئي تفاعلي. ما نوع البيانات التي ترغب في تضمينها في التقرير؟",
+            "الذكاء الاصطناعي": "الذكاء الاصطناعي يمكنه تحليل كميات كبيرة من البيانات البيئية، واكتشاف الأنماط، واقتراح حلول مبتكرة للمشكلات البيئية. كما يمكنه مساعدة الطلاب في فهم المفاهيم البيئية المعقدة.",
+            "default": "أنا هنا لمساعدتك في الأمور البيئية. يمكنني تقديم معلومات عن جودة الهواء، استهلاك المياه والطاقة، أو مساعدتك في التخطيط لمشاريعك البيئية. ما الذي تريد معرفته؟"
+        };
+
+        // عناصر DOM
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        const updateDataButton = document.getElementById('updateData');
+        const airQualityElement = document.getElementById('airQuality');
+        const waterConsumptionElement = document.getElementById('waterConsumption');
+        const energyConsumptionElement = document.getElementById('energyConsumption');
+
+        // إرسال رسالة عند النقر على زر الإرسال
+        sendButton.addEventListener('click', sendMessage);
+        
+        // إرسال رسالة عند الضغط على Enter
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // تحديث البيانات البيئية
+        updateDataButton.addEventListener('click', updateEnvironmentalData);
+
+        // دالة إرسال الرسالة
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (message === '') return;
+
+            // إضافة رسالة المستخدم
+            addMessage(message, 'user');
+            
+            // مسح حقل الإدخال
+            userInput.value = '';
+            
+            // محاكاة معالجة الذكاء الاصطناعي
+            setTimeout(() => {
+                let response = aiResponses.default;
+                
+                // البحث عن كلمات مفتاحية في الرسالة
+                for (const [key, value] of Object.entries(aiResponses)) {
+                    if (message.includes(key)) {
+                        response = value;
+                        break;
+                    }
+                }
+                
+                // إضافة رد الذكاء الاصطناعي
+                addMessage(response, 'bot');
+            }, 1000);
+        }
+
+        // دالة إضافة رسالة إلى الدردشة
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+            
+            const messageContent = document.createElement('div');
+            if (sender === 'bot') {
+                messageContent.innerHTML = `<strong>الروبوت المساعد:</strong> ${text}`;
+            } else {
+                messageContent.innerHTML = `<strong>أنت:</strong> ${text}`;
+            }
+            
+            messageDiv.appendChild(messageContent);
+            chatMessages.appendChild(messageDiv);
+            
+            // التمرير إلى الأسفل
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // دالة تحديث البيانات البيئية
+        function updateEnvironmentalData() {
+            // محاكاة تغيير البيانات
+            const newAirQuality = Math.floor(Math.random() * 30) + 70;
+            const newWaterConsumption = Math.floor(Math.random() * 100) + 250;
+            const newEnergyConsumption = Math.floor(Math.random() * 5) + 13;
+            
+            // تحديث القيم مع تأثير متحرك
+            animateValue(airQualityElement, parseInt(airQualityElement.textContent), newAirQuality, 1000, '%');
+            animateValue(waterConsumptionElement, parseInt(waterConsumptionElement.textContent), newWaterConsumption, 1000, ' لتر');
+            animateValue(energyConsumptionElement, parseInt(energyConsumptionElement.textContent), newEnergyConsumption, 1000, ' ك.و.س');
+            
+            // تحديث أشرطة التقدم
+            document.querySelectorAll('.progress-bar')[0].style.width = `${newAirQuality}%`;
+            document.querySelectorAll('.progress-bar')[1].style.width = `${(newWaterConsumption / 500) * 100}%`;
+            document.querySelectorAll('.progress-bar')[2].style.width = `${(newEnergyConsumption / 20) * 100}%`;
+        }
+
+        // دالة لتحريك القيم برسوم متحركة
+        function animateValue(element, start, end, duration, suffix) {
+            const range = end - start;
+            const increment = end > start ? 1 : -1;
+            const stepTime = Math.abs(Math.floor(duration / range));
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                element.textContent = current + suffix;
+                
+                if (current === end) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        // إضافة بعض الرسائل المبدئية لتوضيح إمكانيات التطبيق
+        setTimeout(() => {
+            addMessage("جودة الهواء", 'user');
+            setTimeout(() => {
+                addMessage(aiResponses["جودة الهواء"], 'bot');
+            }, 1000);
+        }, 2000);
+    </script>
+</body>
+</html>
